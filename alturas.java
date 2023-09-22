@@ -30,10 +30,7 @@ public class alturas{
         }
         StringBuilder resultadoStr = new StringBuilder();
         for (int i=0; i<n; i++){
-            resultadoStr.append(resultados[i]);
-            if(i<n-1){
-                resultadoStr.append(" ");
-            }
+            resultadoStr.append(resultados[i]+" ");
         }
         System.out.println(resultadoStr.toString());
     }
