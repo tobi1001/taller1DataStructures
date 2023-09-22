@@ -81,7 +81,7 @@ class Linkedlist<T>{
     }
 
     public void Addafter(Node<T> current, T value){
-        if(head==null)
+        if(empty())
             throw new RuntimeException("La lista ya está vacía, no se puede añadir después de nada");
         Node<T> nodo = new Node<T>(value);
         nodo.next = current.next;
