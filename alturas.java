@@ -12,12 +12,12 @@ public class alturas{
         int[] alturas = new int[n];
         int[] resultados = new int[n];
 
-        Sarray<Integer> pila1 = new Sarray<>(n); 
+        Sarray pila1 = new Sarray(n); 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         for(int i = 0; i<n; i++){
             alturas[i] = Integer.parseInt(st.nextToken());
-            while(!pila1.empty() && alturas[i] <= alturas[pila1.peek()]){
+            while( alturas[i] <= alturas[pila1.peek()] && !pila1.empty()){
                 pila1.pop();
             }
             if(!pila1.empty()){
@@ -28,40 +28,40 @@ public class alturas{
             }
             pila1.push(i);
         }
-
+        StringBuilder resultadoStr = new StringBuilder();
         for (int i=0; i<n; i++){
-            System.out.print(resultados[i]);
+            resultadoStr.append(resultados[i]);
             if(i<n-1){
-                System.out.print(" ");
+                resultadoStr.append(" ");
             }
         }
+        System.out.println(resultadoStr.toString());
     }
 }
 
-@SuppressWarnings("unchecked")
-class Sarray<T>{
+class Sarray{
 
     private int top;//indica la posicion en donde se insertará un elemento
-    private T[] sarray;
+    private int[] sarray;
 
 
     Sarray(int i){
         top = 0;//la posicion inicial de los elementos será 0
-        sarray = (T[]) new Object[i];//lista con tamaño en el argumento del constructor
+        sarray = new int[i];//lista con tamaño en el argumento del constructor
     }
 
     Sarray(){
         this(4);//el constructor sin argumentos hará a la lista de tamaño 4
     }
 
-    public void push(T element){
+    public void push(int element){
         if(full())
             throw new RuntimeException("La pila ya está llena");
         sarray[top] = element;//se llena la posicion top
         top++;  //se incrementa un espacio
     }
 
-    public T pop(){
+    public int pop(){
         if(empty())
             throw new RuntimeException("La pila ya está vacía");
         top--;              //se reduce el top
@@ -76,7 +76,7 @@ class Sarray<T>{
         return top <= 0;//el top al ser 0 es vacio ya que es la posicion inicial del array
     }
 
-    public T peek(){
+    public int peek(){
         if(!empty()){
             return sarray[top-1]; //indica que posicion es la última en la pila
         }
