@@ -19,30 +19,35 @@ public class equipos {
                 Equipo equipo = new Equipo(i, tamanoCola);
                 for(int j = 0; j< tamanoCola; j++){
                     int tarea = Integer.parseInt(st.nextToken());
-                    equipo.cola.pushBack(tarea);
+                    equipo.cola_entrada.pushBack(tarea);
                 }
                 equipos[i] = equipo;
             }
+            String comando;
+            LinkedList lista_tareas = new LinkedList();
+            while(!(comando = br.readLine()).equals("STOP")){
+                if(comando.startsWith("ENQUEUE")){
+                    int elemento = Integer.parseInt((comando.substring(8).trim()));
 
-            for(int i = 0; i<t; i++){
-                for(int j = 0; j<3;j++){
-                System.out.print(equipos[i].cola.qarray[j]);
-                System.out.println();
-                }             
-            }       
+                }
+            }
+
+
     }
 }
 
 class Equipo{
 
     int numero;
-    Qarray cola;
+    Qarray cola_entrada;
     Node current;
+    int count;
 
     public Equipo(int i, int k){
         numero = i;
-        cola = new Qarray(k);
-        current = new Node(0);
+        cola_entrada = new Qarray(k);
+        current = new Node(-1);
+        count = 0;
     }
 
 }
