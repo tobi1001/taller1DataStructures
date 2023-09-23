@@ -28,24 +28,60 @@ public class equipos {
             while(!(comando = br.readLine()).equals("STOP")){
                 if(comando.startsWith("ENQUEUE")){
                     int elemento = Integer.parseInt((comando.substring(8).trim()));
-
+                    for(int i = 0; i<t;i++){
+                        if(lista_tareas.empty() && (elemento == equipos[i].cola_entrada.gethead())){
+                            lista_tareas.pushBack(elemento);
+                            equipos[i].current = lista_tareas.head;
+                            equipos[i].cola_salida.pushBack(equipos[i].cola_entrada.popFront());
+                            equipos[i].count++;
+                        }
+                        else if(elemento == equipos[i].cola_entrada.gethead() & equipos[i].current.key == -1){
+                            lista_tareas.pushBack(elemento);
+                            equipos[i].current = lista_tareas.tail;
+                            equipos[i].cola_salida.pushBack(equipos[i].cola_entrada.popFront());
+                            equipos[i].count++;
+                        }
+                        else if(elemento == equipos[i].cola_entrada.gethead() & equipos[i].current.key != -1){
+                            lista_tareas.addAfter(equipos[i].current, elemento);
+                            equipos[i].current = equipos[i].current.next;
+                            equipos[i].cola_salida.pushBack(equipos[i].cola_entrada.popFront());
+                            equipos[i].count++;
+                        }                       
+                        }
+                    }
+                if(comando.equals("DEQUEUE")){
+                    int eliminado = 0;
+                    for(int i = 0; i<t; i++){
+                        if(equipos[i].cola_salida.gethead() == lista_tareas.head.key){
+                        eliminado = lista_tareas.popFront();
+                        equipos[i].cola_salida.popFront();
+                        equipos[i].count--;
+                        output.append(eliminado).append("\n");  
+                        if(equipos[i].count == 0){
+                            equipos[i].current = new Node(-1);
+                        }
+                        break;
+                        }                               
+                    }                     
                 }
-            }
-
-
+            }   
+        System.out.println(output);            
     }
 }
+
 
 class Equipo{
 
     int numero;
     Qarray cola_entrada;
+    Qarray cola_salida;
     Node current;
     int count;
 
     public Equipo(int i, int k){
         numero = i;
         cola_entrada = new Qarray(k);
+        cola_salida = new Qarray(k);
         current = new Node(-1);
         count = 0;
     }
@@ -65,8 +101,8 @@ class Node{
 
 class LinkedList{
 
-    protected Node head;
-    protected Node tail;
+    Node head;
+    Node tail;
 
     public LinkedList(){
         head = tail = null;
@@ -186,9 +222,7 @@ class Qarray extends LinkedList{
         return count <= 0;
     }
 
-    public int get(int i){
-        if(i >= qarray.length || i<0)
-            throw new RuntimeException("Índice inaccesible");
-        return qarray[i];
+    public int gethead(){
+        return qarray[head];
     }
 }
