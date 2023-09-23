@@ -8,6 +8,7 @@ public class colas {
         cola1.Dequeue();
         cola1.Dequeue();
         cola1.Enqueue(5);
+        cola1.Enqueue(6);
         for(int i = 0; i <= 3;i++){
             System.out.println(cola1.get(i));
         }
@@ -24,10 +25,12 @@ class Qarray<T>{
     public int head;   //Marca la posicion del elemento a desencolar
     public int tail;   //Marca la posicion del elemento a encolar
     private T[] qarray; //declaracion del array que hará de cola
+    private int count;
 
     Qarray(int i){                       //el array por defecto tiene head y tail = 0, la cola tendrá i espacios para elementos
         head = 0;
         tail = 0;
+        count = 0;
         qarray = (T[]) new Object[i];
     }
 
@@ -37,29 +40,29 @@ class Qarray<T>{
 
     public void Enqueue(T element){
         if(full())
-            throw new RuntimeException("La cola ya está llena");
-            
-        qarray[tail] = element;          //Coloca el elemento en el tail de la cola
-        tail++;                          //Suma 1 al tail para que ahora esté asignado en la siguinte casilla de la cola
-        tail = tail % qarray.length;     //En caso de que el tail sea igual o mas grande que la length de la cola, este sera pasado por un modulo,
+        throw new RuntimeException("La cola ya está llena");        
+        
+        qarray[tail] = element;          //Coloca el elemento en el tail de la cola                          //Suma 1 al tail para que ahora esté asignado en la siguinte casilla de la cola
+        tail = (tail+1) % qarray.length;
+        count++;     //En caso de que el tail sea igual o mas grande que la length de la cola, este sera pasado por un modulo,
     }                                    //es decir, si tail y length = 4, el modulo hará a tail 0, si el tail es 5, pasará a ser 1
 
     public T Dequeue(){
+        T item = null;
         if(empty())
             throw new RuntimeException("La cola ya está vacía");
-
-        qarray[head] = null;             //El head apunta al elemento que desea desencolar, por eso ahora se hace null             
-        head++;                          //Se suma 1 al head para que sepa que elemento sigue en caso de desencolar
-        head = head % qarray.length;     //En caso de que el head sea igual o mas grande que la length de la cola, este será pasado por un modulo,
-        return qarray[head];             //es decir, 
+        item = qarray[head];  //El head apunta al elemento que desea desencolar, por eso ahora se hace null                                       //Se suma 1 al head para que sepa que elemento sigue en caso de desencolar
+        head = (head+1) % qarray.length; 
+        count--;    //En caso de que el head sea igual o mas grande que la length de la cola, este será pasado por un modulo,
+        return item;             //es decir, 
     }
 
     public boolean full(){
-        return (head % qarray.length == tail % qarray.length) & qarray[head] != null;
+        return count >= qarray.length;
     }
 
     public boolean empty(){
-        return (head % qarray.length == tail % qarray.length) & qarray[head] == null;
+        return count <= 0;
     }
 
     public T get(int i){

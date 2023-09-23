@@ -1,12 +1,12 @@
 public class enlazadas {
     public static void main(String[] args){
-        Linkedlist<Integer> listalink1 = new Linkedlist<>();
-        listalink1.Pushback(3);
-        listalink1.Pushback(4);
-        listalink1.Pushfront(2);
-        listalink1.Pushfront(1);
-        listalink1.Popback();
-        listalink1.PopFront();
+        LinkedList<Integer> listalink1 = new LinkedList<>();
+        listalink1.pushBack(3);
+        listalink1.pushBack(4);
+        listalink1.pushFront(2);
+        listalink1.pushFront(1);
+        listalink1.popBack();
+        listalink1.popFront();
         Node<Integer> i = new Node<>(0);
         i = listalink1.head;
         while(i != null){
@@ -17,7 +17,7 @@ public class enlazadas {
 }
 
 class Node<T>{
-
+    
     T key;
     Node<T> next;
 
@@ -27,23 +27,23 @@ class Node<T>{
     }
 }
 
-class Linkedlist<T>{
+class LinkedList<T>{
 
     Node<T> head;
     Node<T> tail;
 
-    public Linkedlist(){
+    public LinkedList(){
         head = tail = null;
     }
 
-    public void Pushfront(T element){
+    public void pushFront(T element){
         Node<T> nodo = new Node<>(element);         //Creación del nodo
         nodo.key = element;                         //La llave del nodo se asigna al valor pasado a la función
         nodo.next = head;                           //La direccion del head pasará a ser el next del nodo que pusheamos
         head = nodo;                                //Ahora el head será el nodo que pusheamos...si se hiciera al reves el nodo que ahora es nuestro head no tendría un next 
     }
 
-    public void PopFront(){
+    public void popFront(){
         if(head == null)
             throw new RuntimeException("La lista enlazada está vacía"); //En caso de que la lista esté vacía
         head = head.next;   //La cabeza ahora será el nodo siguiente                                                             
@@ -51,7 +51,7 @@ class Linkedlist<T>{
             head = tail;
     }
 
-    public void Pushback(T element){
+    public void pushBack(T element){
         Node<T> nodo = new Node<>(element);
         nodo.key = element;
         nodo.next = null;
@@ -65,7 +65,7 @@ class Linkedlist<T>{
         }
     }
 
-    public void Popback(){
+    public void popBack(){
         if(tail == null)
             throw new RuntimeException("La lista ya está vacía");
         if(head == tail)
@@ -80,7 +80,7 @@ class Linkedlist<T>{
         }
     }
 
-    public void Addafter(Node<T> current, T value){
+    public void addAfter(Node<T> current, T value){
         if(empty())
             throw new RuntimeException("La lista ya está vacía, no se puede añadir después de nada");
         Node<T> nodo = new Node<T>(value);
