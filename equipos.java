@@ -8,61 +8,76 @@ public class equipos {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         boolean flag = true;
         int scenario = 1;
-        while(flag){
-            int t = Integer.parseInt(br.readLine());
+        int t = Integer.parseInt(br.readLine().trim());
+                  
             StringBuilder output = new StringBuilder();
             output.append("Scenario #").append(scenario++).append("\n");
+            Equipo[] equipos = new Equipo[t];  
             for(int i = 0; i<t;i++){
                 StringTokenizer st = new StringTokenizer(br.readLine());
-                
+                int tamanoCola = Integer.parseInt(st.nextToken());
+                Equipo equipo = new Equipo(i, tamanoCola);
+                for(int j = 0; j< tamanoCola; j++){
+                    int tarea = Integer.parseInt(st.nextToken());
+                    equipo.cola.pushBack(tarea);
+                }
+                equipos[i] = equipo;
             }
-        }
+
+            for(int i = 0; i<t; i++){
+                for(int j = 0; j<3;j++){
+                System.out.print(equipos[i].cola.qarray[j]);
+                System.out.println();
+                }             
+            }       
     }
 }
 
-class Equipos{
+class Equipo{
 
     int numero;
-    Qarray<Integer> cola;
+    Qarray cola;
+    Node current;
 
-    public Equipos(int i, int k){
+    public Equipo(int i, int k){
         numero = i;
-        cola = new Qarray<>(k);
+        cola = new Qarray(k);
+        current = new Node(0);
     }
 
 }
 
-class Node<T>{
+class Node{
     
-    T key;
-    Node<T> next;
+    int key;
+    Node next;
 
-    Node(T key){
+    Node(int key){
         this.key = key;
         this.next = null;
     }
 }
 
-class LinkedList<T>{
+class LinkedList{
 
-    protected Node<T> head;
-    protected Node<T> tail;
+    protected Node head;
+    protected Node tail;
 
     public LinkedList(){
         head = tail = null;
     }
 
-    public void pushFront(T element){
-        Node<T> nodo = new Node<>(element);         //Creación del nodo
+    public void pushFront(int element){
+        Node nodo = new Node(element);         //Creación del nodo
         nodo.key = element;                         //La llave del nodo se asigna al valor pasado a la función
         nodo.next = head;                           //La direccion del head pasará a ser el next del nodo que pusheamos
         head = nodo;                                //Ahora el head será el nodo que pusheamos...si se hiciera al reves el nodo que ahora es nuestro head no tendría un next 
     }
 
-    public T popFront(){
+    public int popFront(){
         if(head == null)
             throw new RuntimeException("La lista enlazada está vacía"); //En caso de que la lista esté vacía
-        Node<T> p = head;
+        Node p = head;
         head = head.next;   //La cabeza ahora será el nodo siguiente                                                             
         if(head == null){
             head = tail;
@@ -70,8 +85,8 @@ class LinkedList<T>{
         return p.key;
     }
 
-    public void pushBack(T element){
-        Node<T> nodo = new Node<>(element);
+    public void pushBack(int element){
+        Node nodo = new Node(element);
         nodo.key = element;
         nodo.next = null;
         if(tail == null){
@@ -84,16 +99,16 @@ class LinkedList<T>{
         }
     }
 
-    public T popBack(){
+    public int popBack(){
         if(tail == null)
             throw new RuntimeException("La lista ya está vacía");
         if(head == tail){
             head = tail = null;
-            return null;
+            return 0;
         }
         else{
-        Node<T> p = tail;
-        Node<T> current = head;
+        Node p = tail;
+        Node current = head;
         while(current.next.next != null){
             current = current.next;
         }
@@ -103,10 +118,10 @@ class LinkedList<T>{
         }
     }
 
-    public void addAfter(Node<T> current, T value){
+    public void addAfter(Node current, int value){
         if(empty())
             throw new RuntimeException("La lista ya está vacía, no se puede añadir después de nada");
-        Node<T> nodo = new Node<T>(value);
+        Node nodo = new Node(value);
         nodo.next = current.next;
         current.next = nodo;
         if(tail == current)
@@ -118,20 +133,18 @@ class LinkedList<T>{
     }
 }
 
-@SuppressWarnings("unchecked")
-
-class Qarray<T> extends LinkedList<T>{
+class Qarray extends LinkedList{
 
     int head;   //Marca la posicion del elemento a desencolar
     int tail;   //Marca la posicion del elemento a encolar
-    private T[] qarray; //declaracion del array que hará de cola
+    int[] qarray; //declaracion del array que hará de cola
     private int count;
 
     Qarray(int i){                       //el array por defecto tiene head y tail = 0, la cola tendrá i espacios para elementos
         head = 0;
         tail = 0;
         count = 0;
-        qarray = (T[]) new Object[i];
+        qarray = new int[i];
     }
 
     Qarray(){
@@ -139,7 +152,7 @@ class Qarray<T> extends LinkedList<T>{
     }
 
     @Override
-    public void pushBack(T element){
+    public void pushBack(int element){
         if(full())
         throw new RuntimeException("La cola ya está llena");        
         
@@ -149,8 +162,8 @@ class Qarray<T> extends LinkedList<T>{
     }                                    //es decir, si tail y length = 4, el modulo hará a tail 0, si el tail es 5, pasará a ser 1
 
     @Override
-    public T popFront(){
-        T item = null;
+    public int popFront(){
+        int item = -1;
         if(empty())
             throw new RuntimeException("La cola ya está vacía");
         item = qarray[head];  //El head apunta al elemento que desea desencolar, por eso ahora se hace null                                       //Se suma 1 al head para que sepa que elemento sigue en caso de desencolar
@@ -168,7 +181,7 @@ class Qarray<T> extends LinkedList<T>{
         return count <= 0;
     }
 
-    public T get(int i){
+    public int get(int i){
         if(i >= qarray.length || i<0)
             throw new RuntimeException("Índice inaccesible");
         return qarray[i];
