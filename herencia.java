@@ -1,21 +1,23 @@
 public class herencia {
     public static void main(String[] args){
     Qarray<Integer> cola1 = new Qarray<>();
-    cola1.pushBack(1);
-    cola1.pushBack(1);
-    cola1.pushBack(1);
-    cola1.pushBack(1);
-    cola1.popFront();
-    cola1.popFront();
-    cola1.pushBack(2);
-    cola1.pushBack(2);
-
-    for(int i = 0; i <= 3;i++){
-        System.out.println(cola1.get(i));
+    cola1.enqueue(1);
+    cola1.enqueue(1);
+    cola1.enqueue(1);
+    cola1.enqueue(1);
+    cola1.dequeue();
+    cola1.dequeue();
+    cola1.enqueue(2);
+    cola1.enqueue(2);
+    Node<Integer> i = new Node<>(0);
+    i = cola1.head;
+    while(i != null){
+        System.out.println(i.key);
+        i = i.next;
     }
     System.out.println("-----------------");
-    System.out.println(cola1.head);
-    System.out.println(cola1.tail);
+    System.out.println(cola1.head.key);
+    System.out.println(cola1.tail.key);
     System.out.println("Caso LinkedList");
     LinkedList<Integer> listalink1 = new LinkedList<>();
     listalink1.pushBack(3);
@@ -33,11 +35,11 @@ public class herencia {
     // Si encontramos el nodo con el valor 2, agregamos después de él
     listalink1.addAfter(currentNode, 5); // Agregamos el valor 5 después del nodo con el valor 2
     }
-    Node<Integer> i = new Node<>(0);
-    i = listalink1.head;
-    while(i != null){
-        System.out.println(i.key);
-        i = i.next;
+    Node<Integer> k = new Node<>(0);
+    k = listalink1.head;
+    while(k != null){
+        System.out.println(k.key);
+        k = k.next;
     }
     }
 }
@@ -75,7 +77,7 @@ class LinkedList<T>{
         Node<T> p = head;
         head = head.next;   //La cabeza ahora será el nodo siguiente                                                             
         if(head == null){
-            head = tail;
+            tail = null;
         }   //Caso por si la lista enlazada tenia solo 1 elemento y lo eliminamos            
         return p.key;
     }
@@ -123,54 +125,75 @@ class LinkedList<T>{
             tail = nodo;         
     }
 
+    public T erase(T keyToRemove) {
+    if (head == null) {
+        throw new RuntimeException("La lista está vacía");
+    }
+
+    if (head.key == keyToRemove) {
+        T removedValue = head.key;
+        head = head.next;
+        return removedValue;
+    }
+
+    Node<T> current = head;
+    while (current.next != null) {
+        if (current.next.key == keyToRemove) {
+            T removedValue = current.next.key;
+            current.next = current.next.next;
+            return removedValue;
+        }
+        current = current.next;
+    }
+    throw new RuntimeException("Elemento no encontrado");
+}
+
+    public T findint(T keyToFind) {
+    Node<T> current = head;
+    while (current != null) {
+        if (current.key == keyToFind) {
+            return current.key; // Elemento encontrado, retorna el valor
+        }
+        current = current.next;
+    }
+    return null; // Elemento no encontrado, retorna null como valor especial
+    }
+
+    public boolean findboolean(T keyToFind) {
+    Node<T> current = head;
+    while (current != null) {
+        if (current.key == keyToFind) {
+            return true; // Elemento encontrado, retorna el valor
+        }
+        current = current.next;
+    }
+    return false; // Elemento no encontrado, retorna -1 como valor especial
+    }
+
     public boolean empty(){
         return head == null;
     }
 }
 
-@SuppressWarnings("unchecked")
 
 class Qarray<T> extends LinkedList<T>{
-
-    int head;   //Marca la posicion del elemento a desencolar
-    int tail;   //Marca la posicion del elemento a encolar
-    private T[] qarray; //declaracion del array que hará de cola
     private int count;
 
-    Qarray(int i){                       //el array por defecto tiene head y tail = 0, la cola tendrá i espacios para elementos
-        head = 0;
-        tail = 0;
-        count = 0;
-        qarray = (T[]) new Object[i];
+    Qarray(){                       //el array por defecto tiene head y tail = 0, la cola tendrá i espacios para elementos
+        super();
+        count = 0;      
     }
 
-    Qarray(){
-        this(4);                       //Constructor base para una cola de 4 elementos
-    }
-
-    @Override
-    public void pushBack(T element){
-        if(full())
-        throw new RuntimeException("La cola ya está llena");        
-        
-        qarray[tail] = element;          //Coloca el elemento en el tail de la cola                          //Suma 1 al tail para que ahora esté asignado en la siguinte casilla de la cola
-        tail = (tail+1) % qarray.length;
+    public void enqueue(T element){
+        pushBack(element);
         count++;     //En caso de que el tail sea igual o mas grande que la length de la cola, este sera pasado por un modulo,
     }                                    //es decir, si tail y length = 4, el modulo hará a tail 0, si el tail es 5, pasará a ser 1
 
-    @Override
-    public T popFront(){
-        T item = null;
-        if(empty())
-            throw new RuntimeException("La cola ya está vacía");
-        item = qarray[head];  //El head apunta al elemento que desea desencolar, por eso ahora se hace null                                       //Se suma 1 al head para que sepa que elemento sigue en caso de desencolar
-        head = (head+1) % qarray.length; 
-        count--;    //En caso de que el head sea igual o mas grande que la length de la cola, este será pasado por un modulo,
-        return item;             //es decir, 
-    }
-
-    public boolean full(){
-        return count >= qarray.length;
+    public T dequeue(){
+        T p;
+        p = popFront();
+        count--;
+        return p;
     }
 
     @Override 
@@ -178,9 +201,4 @@ class Qarray<T> extends LinkedList<T>{
         return count <= 0;
     }
 
-    public T get(int i){
-        if(i >= qarray.length || i<0)
-            throw new RuntimeException("Índice inaccesible");
-        return qarray[i];
-    }
 }
