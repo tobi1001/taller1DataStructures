@@ -10,27 +10,31 @@ public class alturas{
         //Se hace int la entrada y se establecen los tamaños de las listas
         int n = Integer.parseInt(br.readLine());
         int[] alturas = new int[n];
-        int[] resultados = new int[n];
-
+        int[] finalalturas = new int[n];
+        //Pila que contendrá los mínimos a la izquierda de cada torre
         Sarray pila1 = new Sarray(n); 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         for(int i = 0; i<n; i++){
             alturas[i] = Integer.parseInt(st.nextToken());
+            //En caso de la altura ser mayor o igual a la que tomamos en la comparación, sale de la pila
             while( alturas[i] <= alturas[pila1.peek()] && !pila1.empty()){
                 pila1.pop();
             }
+            //Si la pila no está vacía al final del ciclo se coloca el top en el array alturasfinales y se le suma 1
             if(!pila1.empty()){
-                resultados[i] = pila1.peek() + 1;
+                finalalturas[i] = pila1.peek() + 1;
             }
+            //Si la pila termina completamente vacía se coloca un 0
             else{
-                resultados[i] = 0;
+                finalalturas[i] = 0;
             }
+            //Se pushea el ultimo elemento comparado a la pila
             pila1.push(i);
         }
         StringBuilder resultadoStr = new StringBuilder();
         for (int i=0; i<n; i++){
-            resultadoStr.append(resultados[i]+" ");
+            resultadoStr.append(finalalturas[i]+" ");
         }
         System.out.println(resultadoStr.toString());
     }

@@ -1,6 +1,6 @@
 public class herencia {
     public static void main(String[] args){
-    Qarray<Integer> cola1 = new Qarray<>(4);
+    Qarray<Integer> cola1 = new Qarray<>();
     cola1.pushBack(1);
     cola1.pushBack(1);
     cola1.pushBack(1);
