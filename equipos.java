@@ -5,13 +5,21 @@ import java.io.InputStreamReader;
 
 public class equipos {
     public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        boolean flag = true;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));;
         int scenario = 1;
-        int t = Integer.parseInt(br.readLine().trim());
-                  
+        while(true){
+            int t = Integer.parseInt(br.readLine().trim());
+            if(t == 0)
+                break;
             StringBuilder output = new StringBuilder();
             output.append("Scenario #").append(scenario++).append("\n");
+            procesarCaso(br, t, output);
+            System.out.println(output);
+        }
+    }    
+                 
+            
+private static void procesarCaso(BufferedReader br, int t, StringBuilder output) throws IOException{           
             Equipo[] equipos = new Equipo[t];  
             for(int i = 0; i<t;i++){
                 StringTokenizer st = new StringTokenizer(br.readLine());
@@ -29,32 +37,33 @@ public class equipos {
                 if(comando.startsWith("ENQUEUE")){
                     int elemento = Integer.parseInt((comando.substring(8).trim()));
                     for(int i = 0; i<t;i++){
-                        if(lista_tareas.empty() && (elemento == equipos[i].cola_entrada.gethead())){
+                        if(lista_tareas.empty() & (true == equipos[i].cola_entrada.find(elemento))){
                             lista_tareas.pushBack(elemento);
                             equipos[i].current = lista_tareas.head;
-                            equipos[i].cola_salida.pushBack(equipos[i].cola_entrada.popFront());
                             equipos[i].count++;
+                            break;
+                            
                         }
-                        else if(elemento == equipos[i].cola_entrada.gethead() & equipos[i].current.key == -1){
+                        else if(true == equipos[i].cola_entrada.find(elemento) & equipos[i].current.key == -1){
                             lista_tareas.pushBack(elemento);
-                            equipos[i].current = lista_tareas.tail;
-                            equipos[i].cola_salida.pushBack(equipos[i].cola_entrada.popFront());
+                            equipos[i].current = lista_tareas.tail; 
                             equipos[i].count++;
+                            break;
+                            
                         }
-                        else if(elemento == equipos[i].cola_entrada.gethead() & equipos[i].current.key != -1){
+                        else if(true == equipos[i].cola_entrada.find(elemento) & equipos[i].current.key != -1){
                             lista_tareas.addAfter(equipos[i].current, elemento);
                             equipos[i].current = equipos[i].current.next;
-                            equipos[i].cola_salida.pushBack(equipos[i].cola_entrada.popFront());
                             equipos[i].count++;
+                            break;
                         }                       
                         }
                     }
                 if(comando.equals("DEQUEUE")){
                     int eliminado = 0;
                     for(int i = 0; i<t; i++){
-                        if(equipos[i].cola_salida.gethead() == lista_tareas.head.key){
+                        if(equipos[i].cola_entrada.find(lista_tareas.head.key) == true){
                         eliminado = lista_tareas.popFront();
-                        equipos[i].cola_salida.popFront();
                         equipos[i].count--;
                         output.append(eliminado).append("\n");  
                         if(equipos[i].count == 0){
@@ -65,23 +74,20 @@ public class equipos {
                     }                     
                 }
             }   
-        System.out.println(output);            
+             
     }
 }
-
 
 class Equipo{
 
     int numero;
-    Qarray cola_entrada;
-    Qarray cola_salida;
+    LinkedList cola_entrada;
     Node current;
     int count;
 
     public Equipo(int i, int k){
         numero = i;
-        cola_entrada = new Qarray(k);
-        cola_salida = new Qarray(k);
+        cola_entrada = new LinkedList();
         current = new Node(-1);
         count = 0;
     }
@@ -121,7 +127,7 @@ class LinkedList{
         Node p = head;
         head = head.next;   //La cabeza ahora será el nodo siguiente                                                             
         if(head == null){
-            head = tail;
+            tail = null;
         }   //Caso por si la lista enlazada tenia solo 1 elemento y lo eliminamos            
         return p.key;
     }
@@ -167,6 +173,52 @@ class LinkedList{
         current.next = nodo;
         if(tail == current)
             tail = nodo;         
+    }
+
+    public int erase(int keyToRemove) {
+    if (head == null) {
+        throw new RuntimeException("La lista está vacía");
+    }
+
+    if (head.key == keyToRemove) {
+        int removedValue = head.key;
+        head = head.next;
+        return removedValue;
+    }
+
+    Node current = head;
+    while (current.next != null) {
+        if (current.next.key == keyToRemove) {
+            int removedValue = current.next.key;
+            current.next = current.next.next;
+            return removedValue;
+        }
+        current = current.next;
+    }
+
+    throw new RuntimeException("Elemento no encontrado");
+}
+
+    public int findint(int keyToFind) {
+    Node current = head;
+    while (current != null) {
+        if (current.key == keyToFind) {
+            return current.key; // Elemento encontrado, retorna el valor
+        }
+        current = current.next;
+    }
+    return -1; // Elemento no encontrado, retorna -1 como valor especial
+    }
+
+    public boolean find(int keyToFind) {
+    Node current = head;
+    while (current != null) {
+        if (current.key == keyToFind) {
+            return true; // Elemento encontrado, retorna el valor
+        }
+        current = current.next;
+    }
+    return false; // Elemento no encontrado, retorna -1 como valor especial
     }
 
     public boolean empty(){
