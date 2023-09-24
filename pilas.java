@@ -9,6 +9,7 @@ public class pilas{
     }
 }
 
+@SuppressWarnings("unchecked")
 
 class Sarray<T>{
 

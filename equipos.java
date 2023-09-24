@@ -18,8 +18,7 @@ public class equipos{
             System.out.println(output);
         }
     }    
-                 
-            
+                          
     private static void procesarCaso(BufferedReader br, int t, StringBuilder output) throws IOException{      
             //lista con todos los equipos     
             Equipo[] equipos = new Equipo[t];  
@@ -45,25 +44,23 @@ public class equipos{
                     //para cada equipo se revisaran los casos:
                     for(int i = 0; i<t;i++){
                         //Si el elemento está en uno de los equipos y no hay elementos del equipo en la lista
-                        if(true == equipos[i].getColaEntrada().findboolean(elemento) & equipos[i].getCurrent().getKey() == -1){
-                            lista_tareas.pushBack(elemento);
-                            //Se hace al elemento el ultimo de la lista, y el current es el nuevo nodo colocado en la lista
-                            equipos[i].setCurrent(lista_tareas.getTail()); 
+                        if(true == equipos[i].getColaEntrada().findboolean(elemento)){
+                            if(equipos[i].getCurrent().getKey() == -1){
+                                lista_tareas.pushBack(elemento);
+                                //Se hace al elemento el ultimo de la lista, y el current del equipo es el nuevo nodo colocado al final de la lista
+                                equipos[i].setCurrent(lista_tareas.getTail());
+                            }
+                            //Si el elemento está en uno de los equipos y hay elementos del equipo en la lista   
+                            else{  
+                                lista_tareas.addAfter(equipos[i].getCurrent(), elemento);
+                                //El current establece el ultimo nodo del equipo
+                                equipos[i].setCurrent(equipos[i].getCurrent().getNext());
+                            }                  
                             equipos[i].setCount(1);
-                            break;
-                            
-                        }
-                         //Si el elemento está en uno de los equipos y hay elementos del equipo en la lista
-                        else if(true == equipos[i].getColaEntrada().findboolean(elemento) & equipos[i].getCurrent().getKey() != -1){
-                            //se añade el elemento despues de el ultimo elemento de equipo
-                            lista_tareas.addAfter(equipos[i].getCurrent(), elemento);
-                            //El current establece el ultimo nodo del equipo
-                            equipos[i].setCurrent(equipos[i].getCurrent().getNext());
-                            equipos[i].setCount(1);
-                            break;
-                        }                       
-                        }
+                            break;                          
+                        }                                         
                     }
+                }
                 //Procedimiento para los dequeues
                 if(comando.equals("DEQUEUE")){
                     int eliminado = 0;
@@ -80,11 +77,10 @@ public class equipos{
                         }
                         //en caso de encontrar el elemento deseado y sacarlo de la lista, se rompe el ciclo
                         break;
-                        }                               
-                    }                     
-                }
-            }   
-             
+                    }                               
+                }                     
+            }
+        }               
     }
 }
 
