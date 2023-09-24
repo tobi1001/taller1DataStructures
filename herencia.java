@@ -16,31 +16,8 @@ public class herencia {
         i = i.next;
     }
     System.out.println("-----------------");
-    System.out.println(cola1.head.key);
-    System.out.println(cola1.tail.key);
-    System.out.println("Caso LinkedList");
-    LinkedList<Integer> listalink1 = new LinkedList<>();
-    listalink1.pushBack(3);
-    listalink1.pushBack(4);
-    listalink1.pushFront(2);
-    listalink1.pushFront(1);
-    listalink1.popBack();
-    listalink1.popFront();
-    Node<Integer> currentNode = listalink1.head; // Comenzamos desde el nodo de la cabeza
-    while (currentNode != null && currentNode.key != 2) {
-    // Avanzamos al siguiente nodo hasta encontrar el nodo con el valor 2
-    currentNode = currentNode.next;
-    }
-    if (currentNode != null) {
-    // Si encontramos el nodo con el valor 2, agregamos después de él
-    listalink1.addAfter(currentNode, 5); // Agregamos el valor 5 después del nodo con el valor 2
-    }
-    Node<Integer> k = new Node<>(0);
-    k = listalink1.head;
-    while(k != null){
-        System.out.println(k.key);
-        k = k.next;
-    }
+    
+    //PRUEBAS
     }
 }
 
@@ -52,6 +29,22 @@ class Node<T>{
     Node(T key){
         this.key = key;
         this.next = null;
+    }
+
+    public void setKey(T key){
+        this.key = key;
+    }
+
+    public void setNext(Node<T> n){
+        this.next = n;
+    }
+
+    public T getKey(){
+        return this.key;
+    }
+
+    public Node<T> getNext(){
+        return this.next;
     }
 }
 
@@ -190,10 +183,10 @@ class Qarray<T> extends LinkedList<T>{
     }                                    //es decir, si tail y length = 4, el modulo hará a tail 0, si el tail es 5, pasará a ser 1
 
     public T dequeue(){
-        T p;
-        p = popFront();
+        T primero;
+        primero = popFront();
         count--;
-        return p;
+        return primero;
     }
 
     @Override 
@@ -201,4 +194,34 @@ class Qarray<T> extends LinkedList<T>{
         return count <= 0;
     }
 
+}
+
+class Sarray<T> extends LinkedList<T>{
+    
+    private int top;//indica la posicion en donde se insertará un elemento
+
+    Sarray(){
+        super();
+        top = 0;//la posicion inicial de los elementos será 0
+    }
+
+    public void push(T element){
+        pushBack(element);//se llena la posicion top
+        top++;  //se incrementa un espacio
+    }
+
+    public T pop(){
+        T ultimo;
+        ultimo = popBack();
+        top--;              //se reduce el top
+        return ultimo; //retorna el elemento que quitamos, no es necesario hacerlo null ya que al hacer un push por ejemplo, este será reemplazado (-operaciones, + eficiencia)
+    }
+
+    public boolean empty(){
+        return top <= 0;//el top al ser 0 es vacio ya que es la posicion inicial del array
+    }
+
+    public T peek(){
+        return tail.key;
+    }
 }

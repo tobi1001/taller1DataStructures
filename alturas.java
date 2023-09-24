@@ -18,7 +18,7 @@ public class alturas{
         for(int i = 0; i<n; i++){
             alturas[i] = Integer.parseInt(st.nextToken());
             //En caso de la altura ser mayor o igual a la que tomamos en la comparación, sale de la pila
-            while( alturas[i] <= alturas[pila1.peek()] && !pila1.empty()){
+            while(alturas[i] <= alturas[pila1.peek()] && !pila1.empty()){
                 pila1.pop();
             }
             //Si la pila no está vacía al final del ciclo se coloca el top en el array alturasfinales y se le suma 1
